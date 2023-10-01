@@ -1,0 +1,58 @@
+name: Django application
+on: workflow_dispatch
+
+jobs:
+  docker_build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build docker
+        run: docker compose build
+      - name: Run isort
+        run: docker compose run django isort src/ --check
+      - name: Run black
+        run: docker compose run django black src/ --check
+      - name: Run flake8
+        run: docker compose run django flake8
+      - name: Run mypy
+        run: docker compose run django mypy --config mypy.ini src/
+      - name: Run tests
+        run: docker compose run django py.test
+
+  build:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: github_actions
+        ports:
+          - 5432:5432
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+      - uses: Gr1N/setup-poetry@v8
+      - run: poetry install
+        env:
+          POETRY_VIRTUALENVS_IN_PROJECT : true
+      - uses: actions/cache@v2
+        with:
+          path: /home/runner/work/{{ cookiecutter.project_name }}/.venv
+          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
+      
+      - name: Run isort
+        uses: isort/isort-action@master
+      - name: Run black
+        uses: psf/black@stable
+      - name: Run flake8
+        run: /home/runner/work/{{ cookiecutter.project_name }}/.venv/bin/flake8
+      - name: Type check
+        run: /home/runner/work/{{ cookiecutter.project_name }}/.venv/bin/mypy --config mypy.ini src/
+      - name: Run tests
+        run: /home/runner/work/{{ cookiecutter.project_name }}/.venv/bin/pytest
