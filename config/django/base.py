@@ -35,6 +35,7 @@ LOCAL_APPS = [
     "src.api.apps.ApiConfig",
     "src.users.apps.UsersConfig",
     "src.errors.apps.ErrorsConfig",
+    "src.portfolio.apps.PortfolioConfig",
 ]
 
 THIRD_PARTY_APPS = [

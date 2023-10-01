@@ -2,9 +2,7 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
-        "verbose": {
-            "format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s"
-        },
+        "verbose": {"format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s"},
         "simple": {"format": "%(levelname)s %(message)s"},
     },
     "handlers": {
@@ -39,7 +37,7 @@ LOGGING = {
     },
     "loggers": {
         "django": {
-            "handlers": ["console","error"],
+            "handlers": ["console", "error"],
             "level": "DEBUG",
             "propagate": True,
         },
@@ -49,9 +47,9 @@ LOGGING = {
             "propagate": False,
         },
         "src": {
-            "handlers": ["debug_console","error", "debug"],
+            "handlers": ["debug_console", "error", "debug"],
             "level": "DEBUG",
             "propagate": True,
-        }
+        },
     },
 }

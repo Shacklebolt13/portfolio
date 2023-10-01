@@ -1,21 +1,26 @@
-from typing import Any, Callable, Dict,Coroutine
 from abc import ABCMeta
-from channels.generic.websocket import AsyncJsonWebsocketConsumer  # type: ignore
-from ..core.logging import logger
 from logging import Logger
+from typing import Any, Callable, Coroutine, Dict
 
-ROUTING_TABLE : Dict[str, Callable] = {}
+from channels.generic.websocket import AsyncJsonWebsocketConsumer  # type: ignore
 
-def route(handler : str) -> Callable:
-    def decorator(func : Callable) -> Callable:
+from ..core.logging import logger
+
+ROUTING_TABLE: Dict[str, Callable] = {}
+
+
+def route(handler: str) -> Callable:
+    def decorator(func: Callable) -> Callable:
         ROUTING_TABLE[handler] = func
         return func
+
     return decorator
 
+
 @logger
-class Consumer(AsyncJsonWebsocketConsumer,metaclass=ABCMeta):
-    log : Logger
-    
+class Consumer(AsyncJsonWebsocketConsumer, metaclass=ABCMeta):
+    log: Logger
+
     @property
     def get_routing(self) -> Dict[str, Callable]:
         return ROUTING_TABLE
@@ -25,7 +30,7 @@ class Consumer(AsyncJsonWebsocketConsumer,metaclass=ABCMeta):
     async def connect(self):
         await super().connect()
 
-        user = self.scope.get("user",None)
+        user = self.scope.get("user", None)
         user = user.is_authenticated or None
 
         if self.AUTH and not user:
