@@ -43,7 +43,7 @@ jobs:
           POETRY_VIRTUALENVS_IN_PROJECT : true
       - uses: actions/cache@v2
         with:
-          path: /home/runner/work/{{ cookiecutter.project_name }}/.venv
+          path: /home/runner/work/portfolio/.venv
           key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
       
       - name: Run isort
@@ -51,8 +51,8 @@ jobs:
       - name: Run black
         uses: psf/black@stable
       - name: Run flake8
-        run: /home/runner/work/{{ cookiecutter.project_name }}/.venv/bin/flake8
+        run: /home/runner/work/portfolio/.venv/bin/flake8
       - name: Type check
-        run: /home/runner/work/{{ cookiecutter.project_name }}/.venv/bin/mypy --config mypy.ini src/
+        run: /home/runner/work/portfolio/.venv/bin/mypy --config mypy.ini src/
       - name: Run tests
-        run: /home/runner/work/{{ cookiecutter.project_name }}/.venv/bin/pytest
+        run: /home/runner/work/portfolio/.venv/bin/pytest

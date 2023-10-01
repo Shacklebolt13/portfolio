@@ -32,18 +32,13 @@ ALLOWED_HOSTS = ["*"]
 LOCAL_APPS = [
     "src.core.apps.CoreConfig",
     "src.common.apps.CommonConfig",
-    "src.tasks.apps.TasksConfig",
     "src.api.apps.ApiConfig",
     "src.users.apps.UsersConfig",
     "src.errors.apps.ErrorsConfig",
-    "src.files.apps.FilesConfig",
-    "src.emails.apps.EmailsConfig",
 ]
 
 THIRD_PARTY_APPS = [
     "rest_framework",
-    "django_celery_results",
-    "django_celery_beat",
     "django_filters",
     "corsheaders",
     "django_extensions",
@@ -51,8 +46,6 @@ THIRD_PARTY_APPS = [
 ]
 
 INSTALLED_APPS = [
-    "daphne",
-    "channels",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -169,11 +162,7 @@ APP_DOMAIN = env("APP_DOMAIN", default="http://localhost:8000")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-from config.settings.celery import *  # noqa
 from config.settings.cors import *  # noqa
-from config.settings.email_sending import *  # noqa
-from config.settings.files_and_storages import *  # noqa
-from config.settings.google_oauth2 import *  # noqa
 from config.settings.jwt import *  # noqa
 from config.settings.sentry import *  # noqa
 from config.settings.sessions import *  # noqa
